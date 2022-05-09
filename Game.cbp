@@ -32,6 +32,10 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Common.cpp" />
+		<Unit filename="Common.h" />
+		<Unit filename="LTexture.cpp" />
+		<Unit filename="LTexture.h" />
 		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>
