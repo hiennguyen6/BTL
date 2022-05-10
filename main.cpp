@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Common.h"
-#include "LTexture.h"
+#include "Character.h"
 
 using namespace std;
 
@@ -39,6 +39,7 @@ bool Init()
 			}
 			else
 			{
+			    SDL_SetRenderDrawColor(gScreen, 0xFF, 0xFF, 0xFF, 0xFF);
 				int imgFlags = IMG_INIT_PNG;
 				if (!(IMG_Init(imgFlags) & imgFlags))
 				{
@@ -76,6 +77,9 @@ int main(int argc, char* argv[])
     if(LoadBackGround()==false){
         return -1;
     }
+    Character pPlayer;
+    pPlayer.SetRect(200,300);
+    pPlayer.LoadTexture("Char.png", gScreen);
     bool is_quit=false;
     while(!is_quit){
         while(SDL_PollEvent(&gEvent)!=0){
@@ -87,6 +91,7 @@ int main(int argc, char* argv[])
         SDL_RenderClear(gScreen);
 
         gBackGround.Render(gScreen, NULL);
+        pPlayer.Render(gScreen, NULL);
         SDL_RenderPresent(gScreen);
     }
     return 0;

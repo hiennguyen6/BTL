@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1652118405 source:d:\ltnc\btl\main.cpp
+1652199939 source:d:\ltnc\btl\main.cpp
 	<iostream>
 	"Common.h"
-	"LTexture.h"
+	"Character.h"
 
 1652116893 source:d:\ltnc\btl\common.cpp
 	"Common.h"
@@ -12,9 +12,15 @@
 	<SDL_image.h>
 	<iostream>
 
-1652117085 source:d:\ltnc\btl\ltexture.cpp
+1652199749 source:d:\ltnc\btl\ltexture.cpp
 	"LTexture.h"
 
 1652117673 d:\ltnc\btl\ltexture.h
 	"Common.h"
+
+1652198650 source:d:\ltnc\btl\character.cpp
+	"Character.h"
+
+1652198642 d:\ltnc\btl\character.h
+	"LTexture.h"
 
