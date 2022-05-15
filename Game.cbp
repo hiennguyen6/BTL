@@ -32,6 +32,10 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Bullet.cpp" />
+		<Unit filename="Bullet.h" />
+		<Unit filename="Character.cpp" />
+		<Unit filename="Character.h" />
 		<Unit filename="Common.cpp" />
 		<Unit filename="Common.h" />
 		<Unit filename="LTexture.cpp" />

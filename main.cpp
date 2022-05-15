@@ -86,12 +86,18 @@ int main(int argc, char* argv[])
             if(gEvent.type==SDL_QUIT){
                 is_quit=true;
             }
+            pPlayer.HandleGetMove(gEvent, gScreen);
         }
         SDL_SetRenderDrawColor(gScreen, 255, 255, 255, 255);
         SDL_RenderClear(gScreen);
 
         gBackGround.Render(gScreen, NULL);
         pPlayer.Render(gScreen, NULL);
+        pPlayer.HandleMove();
+        pPlayer.HandleBullet(gScreen);
+
+
+
         SDL_RenderPresent(gScreen);
     }
     return 0;
