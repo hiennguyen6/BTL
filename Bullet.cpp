@@ -19,3 +19,11 @@ void Bullet::HandleBulletMove(const int& x_limit, const int& y_limit)
         is_move=false;
     }
 }
+void Bullet::HandleThreatsBulletMove()
+{
+    rect_.x-=x_val;
+    if(rect_.x < 0)
+    {
+        is_move=false;
+    }
+}

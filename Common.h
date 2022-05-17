@@ -19,6 +19,7 @@ static SDL_Event gEvent;
 
 const int SCREEN_WIDTH = 1200;
 const int SCREEN_HEIGHT = 600;
+const int THREATS_NUM = 4;
 
 void LogError(std::string msg, int error_code);
 

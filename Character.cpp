@@ -21,19 +21,19 @@ void Character::HandleGetMove(SDL_Event events, SDL_Renderer* screen)
         {
         case SDLK_UP:
         case SDLK_w:
-            y_val-=CHARACTER_HEIGHT/4;
+            y_val-=CHARACTER_HEIGHT/5;
             break;
         case SDLK_DOWN:
         case SDLK_s:
-            y_val+=CHARACTER_HEIGHT/4;
+            y_val+=CHARACTER_HEIGHT/5;
             break;
         case SDLK_RIGHT:
         case SDLK_d:
-            x_val+=CHARACTER_WIDTH/4;
+            x_val+=CHARACTER_WIDTH/5;
             break;
         case SDLK_LEFT:
         case SDLK_a:
-            x_val-=CHARACTER_WIDTH/4;
+            x_val-=CHARACTER_WIDTH/5;
             break;
         default:
             break;
