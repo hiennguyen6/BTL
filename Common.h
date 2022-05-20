@@ -23,4 +23,9 @@ const int THREATS_NUM = 4;
 
 void LogError(std::string msg, int error_code);
 
+namespace SDLCommon
+{
+    bool CheckTouch(const SDL_Rect& object1, const SDL_Rect& object2 );
+}
+
 #endif

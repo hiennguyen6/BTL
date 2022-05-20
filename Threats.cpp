@@ -58,3 +58,22 @@ void Threats::HandleThreatsBullet(SDL_Renderer* des, const int& x_limit, const i
         }
     }
 }
+void Threats::ResetThreat(const int& x_limit)
+{
+    rect_.x=x_limit;
+    int rand_y=rand()%(SCREEN_HEIGHT-200) + 1;
+    rect_.y=rand_y;
+
+    for(int i=0; i<pBulletList.size(); i++)
+    {
+        Bullet* pBullet=pBulletList.at(i);
+        if(pBullet!=NULL)
+        {
+            ResetThreatBullet(pBullet);
+        }
+    }
+}
+void Threats::ResetThreatBullet(Bullet* pBullet)
+{
+    pBullet->SetRect(rect_.x, rect_.y + rect_.h*0.5);
+}

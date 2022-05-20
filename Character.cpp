@@ -113,3 +113,21 @@ void Character::HandleBullet(SDL_Renderer* des)
         }
     }
 }
+void Character::RemoveBullet(const int& index)
+{
+    for(int i=0; i<pBulletList.size(); i++)
+    {
+       if(pBulletList.size()>0 && pBulletList.size()>index)
+       {
+           Bullet* pBullet = pBulletList.at(index);
+           pBulletList.erase(pBulletList.begin() + index);
+
+           if (pBullet != NULL)
+           {
+               delete pBullet;
+               pBullet = NULL;
+           }
+       }
+    }
+
+}

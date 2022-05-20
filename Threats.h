@@ -24,6 +24,8 @@ public:
     std::vector<Bullet*> Get_Bullet_list() const {return pBulletList;}
     void GetThreatsBullet(Bullet* pBullet, SDL_Renderer* screen);
     void HandleThreatsBullet(SDL_Renderer* des, const int& x_limit, const int& y_limit);
+    void ResetThreat(const int& x_limit);
+    void ResetThreatBullet(Bullet* pBullet);
 private:
     int x_val;
      std::vector<Bullet*> pBulletList;

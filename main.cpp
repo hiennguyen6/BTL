@@ -119,7 +119,6 @@ int main(int argc, char* argv[])
         {
             bkg_x=0;
         }
-
         pPlayer.Render(gScreen, NULL);
         pPlayer.HandleMove();
         pPlayer.HandleBullet(gScreen);
@@ -127,15 +126,42 @@ int main(int argc, char* argv[])
         for(int i=0; i<THREATS_NUM; i++)
         {
             Threats* pThreat = (pThreats + i);
+
+
             pThreat->Render(gScreen, NULL);
             pThreat->HandleThreatsMove(SCREEN_WIDTH, SCREEN_HEIGHT);
             pThreat->HandleThreatsBullet(gScreen, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+            bool is_touch = SDLCommon::CheckTouch(pPlayer.GetRect(), pThreat->GetRect());
+            if(is_touch)
+            {
+                delete [] pThreats;
+                close();
+                return -1;
+            }
+
+            std::vector<Bullet*> bullet_list = pPlayer.GetBulletList();
+            for (int j = 0; j < bullet_list.size(); j++)
+            {
+                Bullet* pBullet = bullet_list.at(j);
+                if(pBullet != NULL)
+                {
+                    bool is_touch_2 = SDLCommon::CheckTouch(pBullet->GetRect(), pThreat->GetRect());
+                    if(is_touch_2)
+                    {
+                        pThreat->ResetThreat(SCREEN_WIDTH + i*SCREEN_WIDTH/4);
+                        pPlayer.RemoveBullet(j);
+                    }
+                }
+            }
+
+
+
         }
-
-
-
         SDL_RenderPresent(gScreen);
+
     }
+    close();
     return 0;
 }
 

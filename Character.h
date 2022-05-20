@@ -19,8 +19,9 @@ public:
     void HandleMove();
 
     void Set_Bullet_List(std::vector<Bullet*> BulletList){pBulletList=BulletList;}
-    std::vector<Bullet*> Get_Bullet_list() const {return pBulletList;}
+    std::vector<Bullet*> GetBulletList() const {return pBulletList;}
     void HandleBullet(SDL_Renderer* des);
+    void RemoveBullet(const int& index);
 
 private:
     int x_val;
