@@ -38,6 +38,8 @@
 		<Unit filename="Character.h" />
 		<Unit filename="Common.cpp" />
 		<Unit filename="Common.h" />
+		<Unit filename="Explosion.cpp" />
+		<Unit filename="Explosion.h" />
 		<Unit filename="LTexture.cpp" />
 		<Unit filename="LTexture.h" />
 		<Unit filename="Threats.cpp" />

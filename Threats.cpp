@@ -77,3 +77,19 @@ void Threats::ResetThreatBullet(Bullet* pBullet)
 {
     pBullet->SetRect(rect_.x, rect_.y + rect_.h*0.5);
 }
+void Threats::RemoveBullet(const int& index)
+{
+    if(pBulletList.size()>0 && pBulletList.size()>index)
+    {
+        Bullet* pBullet = pBulletList.at(index);
+        pBulletList.erase(pBulletList.begin() + index);
+
+        if (pBullet != NULL)
+        {
+            delete pBullet;
+            pBullet = NULL;
+        }
+    }
+
+}
+

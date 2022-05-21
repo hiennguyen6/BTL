@@ -1,9 +1,10 @@
 # depslib dependency file v1.0
-1653075469 source:d:\ltnc\btl\main.cpp
+1653160250 source:d:\ltnc\btl\main.cpp
 	<iostream>
 	"Common.h"
 	"Character.h"
 	"Threats.h"
+	"Explosion.h"
 	<ctime>
 	<cstdlib>
 
@@ -15,13 +16,13 @@
 	<SDL_image.h>
 	<iostream>
 
-1652749738 source:d:\ltnc\btl\ltexture.cpp
+1653160430 source:d:\ltnc\btl\ltexture.cpp
 	"LTexture.h"
 
 1652749703 d:\ltnc\btl\ltexture.h
 	"Common.h"
 
-1653074775 source:d:\ltnc\btl\character.cpp
+1653142816 source:d:\ltnc\btl\character.cpp
 	"Character.h"
 
 1653074282 d:\ltnc\btl\character.h
@@ -35,11 +36,17 @@
 1652741839 source:d:\ltnc\btl\bullet.cpp
 	"Bullet.h"
 
-1653073574 d:\ltnc\btl\threats.h
+1653142909 d:\ltnc\btl\threats.h
 	<vector>
 	"LTexture.h"
 	"Bullet.h"
 
-1653074488 source:d:\ltnc\btl\threats.cpp
+1653142816 source:d:\ltnc\btl\threats.cpp
 	"Threats.h"
+
+1653159995 source:d:\ltnc\btl\explosion.cpp
+	"Explosion.h"
+
+1653159974 d:\ltnc\btl\explosion.h
+	"LTexture.h"
 

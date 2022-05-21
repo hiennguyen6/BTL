@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "Character.h"
 #include "Threats.h"
+#include "Explosion.h"
 #include<ctime>
 #include<cstdlib>
 
@@ -86,7 +87,7 @@ int main(int argc, char* argv[])
     Character pPlayer;
     pPlayer.SetRect(200,300);
     pPlayer.LoadTexture("Char.png", gScreen);
-    bool is_quit=false;
+
     // Threats
     Threats* pThreats = new Threats[THREATS_NUM];
     for(int i=0; i<THREATS_NUM; i++)
@@ -101,7 +102,13 @@ int main(int argc, char* argv[])
        pThreat->GetThreatsBullet(pBullet, gScreen);
 
     }
+    Explosion Texpl;
+    bool tmp=Texpl.LoadEx("exp.png", gScreen);
+    if(!tmp) return -1;
+    Texpl.SetClip();
 
+
+    bool is_quit=false;
     while(!is_quit){
         while(SDL_PollEvent(&gEvent)!=0){
             if(gEvent.type==SDL_QUIT){
@@ -112,7 +119,7 @@ int main(int argc, char* argv[])
         SDL_SetRenderDrawColor(gScreen, 255, 255, 255, 255);
         SDL_RenderClear(gScreen);
 
-        bkg_x-=2;
+        bkg_x-=1;
         gBackGround.RenderBackGround(gScreen, bkg_x);
         gBackGround.RenderBackGround(gScreen, bkg_x+SCREEN_WIDTH);
         if(bkg_x <= -SCREEN_WIDTH)
@@ -139,7 +146,8 @@ int main(int argc, char* argv[])
                 close();
                 return -1;
             }
-
+            int framew=Texpl.GetFrameWidth();
+            int frameh=Texpl.GetFrameHeight();
             std::vector<Bullet*> bullet_list = pPlayer.GetBulletList();
             for (int j = 0; j < bullet_list.size(); j++)
             {
@@ -149,11 +157,39 @@ int main(int argc, char* argv[])
                     bool is_touch_2 = SDLCommon::CheckTouch(pBullet->GetRect(), pThreat->GetRect());
                     if(is_touch_2)
                     {
+                        for(int ex=0; ex<FRAME_NUM; ex++)
+                        {
+                            int xpos=pBullet->GetRect().x - framew*0.5;
+                            int ypos=pBullet->GetRect().y - frameh*0.5;
+
+                            Texpl.GetFrame(ex);
+                            Texpl.SetRect(xpos, ypos);
+                            Texpl.Render(gScreen);
+
+                        }
                         pThreat->ResetThreat(SCREEN_WIDTH + i*SCREEN_WIDTH/4);
                         pPlayer.RemoveBullet(j);
                     }
                 }
             }
+
+            std::vector<Bullet*> Tbullet_list = pThreat->GetBulletList();
+            for (int k = 0; k < Tbullet_list.size(); k++)
+            {
+                Bullet* pTBullet = Tbullet_list.at(k);
+                if(pTBullet != NULL)
+                {
+                    bool is_touch_3 = SDLCommon::CheckTouch(pTBullet->GetRect(), pPlayer.GetRect());
+                    if(is_touch_3)
+                    {
+                        pThreat->RemoveBullet(k);
+                        delete [] pThreats;
+                        close();
+                        return -1;
+                    }
+                }
+            }
+
 
 
 

@@ -38,7 +38,7 @@ bool LTexture::LoadTexture(std::string path, SDL_Renderer *screen)
 	}
 	else
 	{
-	    SDL_SetColorKey(LoadedSurface, SDL_TRUE, SDL_MapRGB(LoadedSurface->format, 167, 175, 180));
+	    SDL_SetColorKey(LoadedSurface, SDL_TRUE, SDL_MapRGB(LoadedSurface->format, 0, 255, 255));
 		NewTexture = SDL_CreateTextureFromSurface(screen, LoadedSurface);
 		if (NewTexture == nullptr)
 		{
