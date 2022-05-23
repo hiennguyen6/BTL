@@ -11,7 +11,9 @@
 using namespace std;
 
 LTexture gBackGround;
+LTexture gLoseTexture;
 TTF_Font* gScore=NULL;
+TTF_Font* gMenu=NULL;
 
 bool Init()
 {
@@ -78,6 +80,11 @@ bool LoadMedia(){
          std::cout << "Failed to load background image" << std::endl;
          success=false;
     }
+    if(!gLoseTexture.LoadTexture("Lose.png", gScreen))
+    {
+         std::cout << "Failed to load background image" << std::endl;
+         success=false;
+    }
     gSoundBullet = Mix_LoadWAV("CharBullet.wav");
     if(gSoundBullet==NULL)
     {
@@ -90,8 +97,14 @@ bool LoadMedia(){
         LogError("Failed to load Expl sound", MIX_ERROR);
         success=false;
     }
-    gScore = TTF_OpenFont("Score.ttf", 15);
+    gScore = TTF_OpenFont("Score.ttf", 20);
     if(gScore==NULL)
+    {
+        LogError("Failed to load font", TTF_ERROR);
+        success = false;
+    }
+    gMenu = TTF_OpenFont("Menu.ttf", 30);
+    if(gMenu==NULL)
     {
         LogError("Failed to load font", TTF_ERROR);
         success = false;
@@ -153,13 +166,21 @@ int main(int argc, char* argv[])
     Texpl.SetClip();
     Texpl2.SetClip();
 
+
     int powernum=POWER_NUM;
     int scoreval=0;
-    bool is_quit=false;
-    while(!is_quit){
+    bool Play_Again=true;
+    gBackGround.Render(gScreen, NULL);
+    SDL_RenderPresent(gScreen);
+    int CheckMenu=SDLCommon::RenderMenu(gScreen, gMenu, gEvent);
+    if(CheckMenu==1)
+    {
+       Play_Again=false;
+    }
+    while(Play_Again){
         while(SDL_PollEvent(&gEvent)!=0){
             if(gEvent.type==SDL_QUIT){
-                is_quit=true;
+                Play_Again=false;
             }
             pPlayer.HandleGetMove(gEvent, gScreen, gSoundBullet);
         }
@@ -167,8 +188,8 @@ int main(int argc, char* argv[])
         SDL_RenderClear(gScreen);
 
         bkg_x-=2;
-        gBackGround.RenderBackGround(gScreen, bkg_x);
-        gBackGround.RenderBackGround(gScreen, bkg_x+SCREEN_WIDTH);
+        gBackGround.RenderBackGround(gScreen, bkg_x, 0);
+        gBackGround.RenderBackGround(gScreen, bkg_x+SCREEN_WIDTH, 0);
         if(bkg_x <= -SCREEN_WIDTH)
         {
             bkg_x=0;

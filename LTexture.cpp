@@ -64,9 +64,10 @@ void LTexture::Render(SDL_Renderer* gRenderer, SDL_Rect* clip)
 
 	SDL_RenderCopy(gRenderer, MTexture, clip, &RenderSpace);
 }
-void LTexture::RenderBackGround(SDL_Renderer* screen, int offset)
+void LTexture::RenderBackGround(SDL_Renderer* screen, int xoffset, int yoffset)
 {
-    rect_.x=offset;
+    rect_.x=xoffset;
+    rect_.y=yoffset;
     SDL_Rect RenderSpace = {rect_.x, rect_.y, rect_.w, rect_.h };
 
 	SDL_RenderCopy(screen, MTexture, NULL, &RenderSpace);

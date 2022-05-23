@@ -6,6 +6,8 @@
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
 #include <iostream>
+#include "LTexture.h"
+#include "Text.h"
 
 #define SDL_ERROR 1
 #define IMG_ERROR 2
@@ -32,6 +34,8 @@ void LogError(std::string msg, int error_code);
 namespace SDLCommon
 {
     bool CheckTouch(const SDL_Rect& object1, const SDL_Rect& object2 );
+    int RenderMenu(SDL_Renderer* screen, TTF_Font* font, SDL_Event events);
+    bool CheckFocus(const int& x, const int& y, const SDL_Rect& rect);
 }
 
 #endif
