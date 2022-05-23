@@ -10,84 +10,103 @@ void LogError(std::string msg, int error_code)
 	{
 		std::cout << msg << IMG_GetError() << std::endl;
 	}
+	if (error_code == MIX_ERROR)
+	{
+		std::cout << msg << Mix_GetError() << std::endl;
+	}
+	if (error_code == TTF_ERROR)
+	{
+		std::cout << msg << TTF_GetError() << std::endl;
+	}
 
 }
 bool SDLCommon::CheckTouch(const SDL_Rect& object1, const SDL_Rect& object2)
 {
 
 
+  int left_a = object1.x;
+  int right_a = object1.x + object1.w;
+  int top_a = object1.y;
+  int bottom_a = object1.y + object1.h;
+
+  int left_b = object2.x;
+  int right_b = object2.x + object2.w;
+  int top_b = object2.y;
+  int bottom_b = object2.y + object2.h;
+
   // Case 1: size object 1 < size object 2
-  if (object1.x > object2.x && object1.x < object2.x + object2.w)
+  if (left_a > left_b && left_a < right_b)
   {
-    if (object1.y > object2.y && object1.y < object2.y + object2.h)
+    if (top_a > top_b && top_a < bottom_b)
     {
       return true;
     }
   }
 
-  if (object1.x > object2.x && object1.x < object2.x + object2.w)
+  if (left_a > left_b && left_a < right_b)
   {
-    if (object1.y + object1.h > object2.y && object1.y + object1.h < object2.y + object2.h)
+    if (bottom_a > top_b && bottom_a < bottom_b)
     {
       return true;
     }
   }
 
-  if (object1.x + object1.w > object2.x && object1.x + object1.w < object2.x + object2.w)
+  if (right_a > left_b && right_a < right_b)
   {
-    if (object1.y > object2.y && object1.y < object2.y + object2.h)
+    if (top_a > top_b && top_a < bottom_b)
     {
       return true;
     }
   }
 
-  if (object1.x + object1.w > object2.x && object1.x + object1.w < object2.x + object2.w)
+  if (right_a > left_b && right_a < right_b)
   {
-    if (object1.y + object1.h > object2.y && object1.y + object1.h < object2.y + object2.h)
+    if (bottom_a > top_b && bottom_a < bottom_b)
     {
       return true;
     }
   }
 
   // Case 2: size object 1 < size object 2
-  if (object2.x > object1.x && object2.x < object1.x + object1.w)
+  if (left_b > left_a && left_b < right_a)
   {
-    if (object2.y > object1.y && object2.y < object1.y + object1.h)
+    if (top_b > top_a && top_b < bottom_a)
     {
       return true;
     }
   }
 
-  if (object2.x > object1.x && object2.x < object1.x + object1.w)
+  if (left_b > left_a && left_b < right_a)
   {
-    if (object2.y + object2.h > object1.y && object2.y + object2.h < object1.y + object1.h)
+    if (bottom_b > top_a && bottom_b < bottom_a)
     {
       return true;
     }
   }
 
-  if (object2.x + object2.w > object1.x && object2.x + object2.w < object1.x + object1.w)
+  if (right_b > left_a && right_b < right_a)
   {
-    if (object2.y > object1.y && object2.y < object1.y + object1.h)
+    if (top_b > top_a && top_b < bottom_a)
     {
       return true;
     }
   }
 
-  if (object2.x + object2.w > object1.x && object2.x + object2.w < object1.x + object1.w)
+  if (right_b > left_a && right_b < right_a)
   {
-    if (object2.y + object2.h > object1.y && object2.y + object2.h < object1.y + object1.h)
+    if (bottom_b > top_a && bottom_b < bottom_a)
     {
       return true;
     }
   }
 
    // Case 3: size object 1 = size object 2
-  if (object1.y == object2.y && object1.x + object1.w == object2.x + object2.w && object1.y + object1.h == object2.y + object2.h)
+  if (top_a == top_b && right_a == right_b && bottom_a == bottom_b)
   {
     return true;
   }
 
   return false;
+
 }
 

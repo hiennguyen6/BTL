@@ -13,7 +13,7 @@ Character::~Character()
 {
     ;
 }
-void Character::HandleGetMove(SDL_Event events, SDL_Renderer* screen)
+void Character::HandleGetMove(SDL_Event events, SDL_Renderer* screen, Mix_Chunk* sound)
 {
     if(events.type == SDL_KEYDOWN)
     {
@@ -21,19 +21,19 @@ void Character::HandleGetMove(SDL_Event events, SDL_Renderer* screen)
         {
         case SDLK_UP:
         case SDLK_w:
-            y_val-=CHARACTER_HEIGHT/5;
+            y_val-=10;
             break;
         case SDLK_DOWN:
         case SDLK_s:
-            y_val+=CHARACTER_HEIGHT/5;
+            y_val+=10;
             break;
         case SDLK_RIGHT:
         case SDLK_d:
-            x_val+=CHARACTER_WIDTH/5;
+            x_val+=10;
             break;
         case SDLK_LEFT:
         case SDLK_a:
-            x_val-=CHARACTER_WIDTH/5;
+            x_val-=10;
             break;
         default:
             break;
@@ -73,6 +73,8 @@ void Character::HandleGetMove(SDL_Event events, SDL_Renderer* screen)
             pBullet->Set_is_move(true);
 
             pBulletList.push_back(pBullet);
+            Mix_PlayChannel(-1, sound, 0);
+
         }
     }
 }

@@ -15,7 +15,7 @@ public:
 
     ~Character();
 
-    void HandleGetMove(SDL_Event events, SDL_Renderer* screen);
+    void HandleGetMove(SDL_Event events, SDL_Renderer* screen, Mix_Chunk* sound);
     void HandleMove();
 
     void Set_Bullet_List(std::vector<Bullet*> BulletList){pBulletList=BulletList;}

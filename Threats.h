@@ -5,8 +5,8 @@
 #include"LTexture.h"
 #include"Bullet.h"
 
-#define THREATS_WIDTH 80
-#define THREATS_HEIGHT 68
+#define THREATS_WIDTH 60
+#define THREATS_HEIGHT 51
 
 class Threats : public LTexture
 {

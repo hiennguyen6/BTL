@@ -3,12 +3,15 @@
 #include "Character.h"
 #include "Threats.h"
 #include "Explosion.h"
+#include "Power.h"
+#include "Text.h"
 #include<ctime>
 #include<cstdlib>
 
 using namespace std;
 
 LTexture gBackGround;
+TTF_Font* gScore=NULL;
 
 bool Init()
 {
@@ -50,6 +53,17 @@ bool Init()
 					LogError("Can not initialize SDL_image", IMG_ERROR);
 					success = false;
 				}
+				if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+				{
+					printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+					success = false;
+				}
+
+				if (TTF_Init() == -1)
+				{
+					printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+					success = false;
+				}
             }
 		}
 	}
@@ -57,9 +71,32 @@ bool Init()
 	return success;
 }
 
-bool LoadBackGround(){
-    bool tmp=gBackGround.LoadTexture("bkg.jpg", gScreen);
-    return tmp;
+bool LoadMedia(){
+    bool success=true;
+    if(!gBackGround.LoadTexture("bkg.jpg", gScreen))
+    {
+         std::cout << "Failed to load background image" << std::endl;
+         success=false;
+    }
+    gSoundBullet = Mix_LoadWAV("CharBullet.wav");
+    if(gSoundBullet==NULL)
+    {
+        LogError("Failed to load CharBullet sound", MIX_ERROR);
+        success=false;
+    }
+    gSoundExpl = Mix_LoadWAV("Explosion.wav");
+    if(gSoundExpl==NULL)
+    {
+        LogError("Failed to load Expl sound", MIX_ERROR);
+        success=false;
+    }
+    gScore = TTF_OpenFont("Score.ttf", 15);
+    if(gScore==NULL)
+    {
+        LogError("Failed to load font", TTF_ERROR);
+        success = false;
+    }
+    return success;
 }
 
 void close(){
@@ -80,9 +117,15 @@ int main(int argc, char* argv[])
     if(Init()==false){
         return -1;
     }
-    if(LoadBackGround()==false){
+    if(LoadMedia()==false){
         return -1;
     }
+    Power pPower;
+    Text Score;
+    Score.SetColor(Text::WHITE_TEXT);
+    Text Time;
+    pPower.LoadTexture("Power.png", gScreen);
+    pPower.Init();
     // Character
     Character pPlayer;
     pPlayer.SetRect(200,300);
@@ -102,32 +145,38 @@ int main(int argc, char* argv[])
        pThreat->GetThreatsBullet(pBullet, gScreen);
 
     }
-    Explosion Texpl;
+    Explosion Texpl,Texpl2;
     bool tmp=Texpl.LoadEx("exp.png", gScreen);
+    bool tmp2=Texpl2.LoadEx("exp.png", gScreen);
     if(!tmp) return -1;
+    if(!tmp2) return -1;
     Texpl.SetClip();
+    Texpl2.SetClip();
 
-
+    int powernum=POWER_NUM;
+    int scoreval=0;
     bool is_quit=false;
     while(!is_quit){
         while(SDL_PollEvent(&gEvent)!=0){
             if(gEvent.type==SDL_QUIT){
                 is_quit=true;
             }
-            pPlayer.HandleGetMove(gEvent, gScreen);
+            pPlayer.HandleGetMove(gEvent, gScreen, gSoundBullet);
         }
         SDL_SetRenderDrawColor(gScreen, 255, 255, 255, 255);
         SDL_RenderClear(gScreen);
 
-        bkg_x-=1;
+        bkg_x-=2;
         gBackGround.RenderBackGround(gScreen, bkg_x);
         gBackGround.RenderBackGround(gScreen, bkg_x+SCREEN_WIDTH);
         if(bkg_x <= -SCREEN_WIDTH)
         {
             bkg_x=0;
         }
-        pPlayer.Render(gScreen, NULL);
+        pPower.Render(gScreen);
+
         pPlayer.HandleMove();
+        pPlayer.Render(gScreen, NULL);
         pPlayer.HandleBullet(gScreen);
 
         for(int i=0; i<THREATS_NUM; i++)
@@ -135,17 +184,13 @@ int main(int argc, char* argv[])
             Threats* pThreat = (pThreats + i);
 
 
-            pThreat->Render(gScreen, NULL);
+
             pThreat->HandleThreatsMove(SCREEN_WIDTH, SCREEN_HEIGHT);
             pThreat->HandleThreatsBullet(gScreen, SCREEN_WIDTH, SCREEN_HEIGHT);
+            pThreat->Render(gScreen, NULL);
 
-            bool is_touch = SDLCommon::CheckTouch(pPlayer.GetRect(), pThreat->GetRect());
-            if(is_touch)
-            {
-                delete [] pThreats;
-                close();
-                return -1;
-            }
+            //int framew1=Texpl2.GetFrameWidth();
+            //int frameh1=Texpl2.GetFrameHeight();
             int framew=Texpl.GetFrameWidth();
             int frameh=Texpl.GetFrameHeight();
             std::vector<Bullet*> bullet_list = pPlayer.GetBulletList();
@@ -154,9 +199,10 @@ int main(int argc, char* argv[])
                 Bullet* pBullet = bullet_list.at(j);
                 if(pBullet != NULL)
                 {
-                    bool is_touch_2 = SDLCommon::CheckTouch(pBullet->GetRect(), pThreat->GetRect());
-                    if(is_touch_2)
+                    bool is_touch = SDLCommon::CheckTouch(pBullet->GetRect(), pThreat->GetRect());
+                    if(is_touch)
                     {
+                        scoreval+=5;
                         for(int ex=0; ex<FRAME_NUM; ex++)
                         {
                             int xpos=pBullet->GetRect().x - framew*0.5;
@@ -169,31 +215,75 @@ int main(int argc, char* argv[])
                         }
                         pThreat->ResetThreat(SCREEN_WIDTH + i*SCREEN_WIDTH/4);
                         pPlayer.RemoveBullet(j);
+                        Mix_PlayChannel(-1, gSoundExpl, 0);
                     }
                 }
             }
+            bool is_touch_2 = SDLCommon::CheckTouch(pThreat->GetRect(), pPlayer.GetRect());
+            if(is_touch_2)
+            {
+                pThreat->ResetThreat(SCREEN_WIDTH + i*SCREEN_WIDTH/4);
+            }
 
             std::vector<Bullet*> Tbullet_list = pThreat->GetBulletList();
+            bool is_touch_3=false;
             for (int k = 0; k < Tbullet_list.size(); k++)
             {
                 Bullet* pTBullet = Tbullet_list.at(k);
                 if(pTBullet != NULL)
                 {
-                    bool is_touch_3 = SDLCommon::CheckTouch(pTBullet->GetRect(), pPlayer.GetRect());
+                    is_touch_3 = SDLCommon::CheckTouch(pTBullet->GetRect(), pPlayer.GetRect());
                     if(is_touch_3)
                     {
-                        pThreat->RemoveBullet(k);
-                        delete [] pThreats;
-                        close();
-                        return -1;
+                        pThreat->ResetThreatBullet(pTBullet);
+                        break;
                     }
                 }
             }
+            if(is_touch_2||is_touch_3)
+            {
+               for(int ex=0; ex<FRAME_NUM; ex++)
+                {
+                    int xpos=pPlayer.GetRect().x + pPlayer.GetRect().w*0.5 - framew*0.5;
+                    int ypos=pPlayer.GetRect().y + pPlayer.GetRect().h*0.5 - frameh*0.5;
 
+                    Texpl.GetFrame(ex);
+                    Texpl.SetRect(xpos, ypos);
+                    Texpl.Render(gScreen);
 
+                }
+                SDL_RenderPresent(gScreen);
+                powernum--;
+                if(powernum==0)
+                {
+                   SDL_Delay(500);
+                   delete [] pThreats;
+                   close();
+                   return -1;
+                }
+                pPower.Decrease();
+                pPower.Render(gScreen);
+
+            }
 
 
         }
+        //Score
+        std::string str_scoreval=std::to_string(scoreval);
+        std::string str_score("Score:");
+        str_score+=str_scoreval;
+        Score.SetText(str_score);
+        Score.LoadFromRenderText(gScore, gScreen);
+        Score.RenderText(gScreen, 500, 10);
+        //Time
+        std::string str_time("Time:");
+        Uint32 timeval=SDL_GetTicks()/1000;
+        std::string str_timeval=std::to_string(timeval);
+        str_time+=str_timeval;
+        Time.SetText(str_time);
+        Time.LoadFromRenderText(gScore, gScreen);
+        Time.RenderText(gScreen, SCREEN_WIDTH-200, 10);
+
         SDL_RenderPresent(gScreen);
 
     }
