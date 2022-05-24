@@ -12,6 +12,8 @@ using namespace std;
 
 LTexture gBackGround;
 LTexture gLoseTexture;
+LTexture gChar;
+LTexture gThreats;
 TTF_Font* gScore=NULL;
 TTF_Font* gMenu=NULL;
 
@@ -85,6 +87,16 @@ bool LoadMedia(){
          std::cout << "Failed to load background image" << std::endl;
          success=false;
     }
+    if(!gChar.LoadTexture("imgs/Char2.png", gScreen))
+    {
+         std::cout << "Failed to load background image" << std::endl;
+         success=false;
+    }
+    if(!gThreats.LoadTexture("imgs/Threats2.png", gScreen))
+    {
+         std::cout << "Failed to load background image" << std::endl;
+         success=false;
+    }
     gSoundBullet = Mix_LoadWAV("Sounds/CharBullet.wav");
     if(gSoundBullet==NULL)
     {
@@ -118,7 +130,7 @@ bool LoadMedia(){
     gSoundButton = Mix_LoadWAV("Sounds/Button.wav");
     if(gSoundButton==NULL)
     {
-        LogError("Failed to load Lose sound", MIX_ERROR);
+        LogError("Failed to load Button sound", MIX_ERROR);
         success=false;
     }
     gGameMusic = Mix_LoadMUS("Sounds/GameMusic.wav");
@@ -130,7 +142,7 @@ bool LoadMedia(){
 	gMenuMusic = Mix_LoadMUS("Sounds/MenuMusic.wav");
 	if (gMenuMusic == NULL)
 	{
-		LogError("Failed to load Game music", MIX_ERROR);
+		LogError("Failed to load Menu music", MIX_ERROR);
 		success = false;
 	}
     gScore = TTF_OpenFont("Fonts/Score.ttf", 20);
@@ -164,6 +176,8 @@ int main(int argc, char* argv[])
     Mix_PlayMusic(gMenuMusic, -1);
     bool Play_Again=true;
     gBackGround.Render(gScreen, NULL);
+    gChar.RenderBackGround(gScreen, 50, 100);
+    gThreats.RenderBackGround(gScreen, 800, 100);
     SDL_RenderPresent(gScreen);
     int CheckMenu=SDLCommon::RenderMenu(gScreen, gMenu, gEvent, gSoundButton);
     if(CheckMenu==1)
@@ -263,7 +277,7 @@ int main(int argc, char* argv[])
                 Threats* pThreat = (pThreats + i);
 
 
-                pThreat->Set_x_val(3);
+                pThreat->Set_x_val(ThreatsSpeed);
                 pThreat->HandleThreatsMove(SCREEN_WIDTH, SCREEN_HEIGHT);
                 pThreat->HandleThreatsBullet(gScreen, SCREEN_WIDTH, SCREEN_HEIGHT);
                 pThreat->Render(gScreen, NULL);
@@ -395,7 +409,7 @@ int main(int argc, char* argv[])
 
         }
         gLoseTexture.RenderBackGround(gScreen, 275, 200);
-        Lose.SetText("Press SPACE to play again or press ESC to exit");
+        Lose.SetText("Press SPACE to play again or ESC to exit game");
         Lose.LoadFromRenderText(gMenu, gScreen);
         Lose.RenderText(gScreen, 100, 80);
         SDL_RenderPresent(gScreen);

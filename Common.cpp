@@ -121,10 +121,10 @@ int SDLCommon::RenderMenu(SDL_Renderer* screen, TTF_Font* font, SDL_Event events
 
     Text Menu[2];
     Menu[0].SetText("Play");
-    Menu[0].SetColor(Text::BLACK_TEXT);
+    Menu[0].SetColor(Text::WHITE_TEXT);
 
     Menu[1].SetText("Exit");
-    Menu[1].SetColor(Text::BLACK_TEXT);
+    Menu[1].SetColor(Text::WHITE_TEXT);
 
     while(true)
     {
@@ -149,11 +149,11 @@ int SDLCommon::RenderMenu(SDL_Renderer* screen, TTF_Font* font, SDL_Event events
                         if(CheckFocus(xpos, ypos, MenuItemPos[i]))
                         {
 
-                            Menu[i].SetColor(Text::WHITE_TEXT);
+                            Menu[i].SetColor(Text::BLACK_TEXT);
                         }
                         else
                         {
-                            Menu[i].SetColor(Text::BLACK_TEXT);
+                            Menu[i].SetColor(Text::WHITE_TEXT);
                         }
                     }
                     break;
@@ -233,9 +233,6 @@ void DrawEndGameSelection(SDL_Event events, SDL_Renderer* screen, bool &Play_Aga
 
 			}
 
-
-
-			SDL_RenderPresent(screen);
 		}
 	}
 }
