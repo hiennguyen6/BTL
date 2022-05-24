@@ -67,7 +67,7 @@ void Character::HandleGetMove(SDL_Event events, SDL_Renderer* screen, Mix_Chunk*
         if(events.button.button == SDL_BUTTON_LEFT)
         {
             Bullet* pBullet = new Bullet();
-            pBullet->LoadTexture("Bullet.png", screen);
+            pBullet->LoadTexture("imgs/Bullet.png", screen);
             pBullet->SetRect(this->rect_.x+100, rect_.y+50);
             pBullet->Set_x_val(20);
             pBullet->Set_is_move(true);
@@ -86,7 +86,7 @@ void Character::HandleMove()
        rect_.x-=x_val;
    }
    rect_.y+=y_val;
-   if(rect_.y < 0 || rect_.y + CHARACTER_HEIGHT > SCREEN_HEIGHT - 200)
+   if(rect_.y < 30 || rect_.y + CHARACTER_HEIGHT > SCREEN_HEIGHT - 100)
    {
        rect_.y-=y_val;
    }

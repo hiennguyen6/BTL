@@ -17,7 +17,7 @@ public:
     void HandleThreatsMove(const int& x_limit, const int& y_limit);
     void GetEvents(SDL_Event events);
 
-    void Set_x_val(const int& xval){x_val=xval;}
+    void Set_x_val(const double& xval){x_val=xval;}
     int Get_x_val() const {return x_val;}
 
     void Set_Bullet_List(std::vector<Bullet*> BulletList){pBulletList=BulletList;}
@@ -27,6 +27,7 @@ public:
     void ResetThreat(const int& x_limit);
     void ResetThreatBullet(Bullet* pBullet);
     void RemoveBullet(const int& index);
+    void RemoveBullet();
 
 private:
     int x_val;

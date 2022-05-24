@@ -48,6 +48,7 @@
 		<Unit filename="Text.h" />
 		<Unit filename="Threats.cpp" />
 		<Unit filename="Threats.h" />
+		<Unit filename="highscore.txt" />
 		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>

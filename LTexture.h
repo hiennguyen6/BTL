@@ -21,7 +21,7 @@ public:
 
 	void Render(SDL_Renderer* gRenderer, SDL_Rect* clip = nullptr);
 
-	void RenderBackGround(SDL_Renderer* screen, int offset);
+	void RenderBackGround(SDL_Renderer* screen, int xoffset, int yoffset);
 
 protected:
 	SDL_Texture* MTexture;

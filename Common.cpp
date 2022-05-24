@@ -1,5 +1,6 @@
 #include "Common.h"
 
+
 void LogError(std::string msg, int error_code)
 {
 	if (error_code == SDL_ERROR)
@@ -109,7 +110,7 @@ bool SDLCommon::CheckTouch(const SDL_Rect& object1, const SDL_Rect& object2)
   return false;
 
 }
-int SDLCommon::RenderMenu(SDL_Renderer* screen, TTF_Font* font, SDL_Event events)
+int SDLCommon::RenderMenu(SDL_Renderer* screen, TTF_Font* font, SDL_Event events, Mix_Chunk* SoundButton)
 {
     SDL_Rect MenuItemPos[2];
     MenuItemPos[0].x=550;
@@ -139,6 +140,7 @@ int SDLCommon::RenderMenu(SDL_Renderer* screen, TTF_Font* font, SDL_Event events
                 return 1;
             case SDL_MOUSEMOTION:
                 {
+
                     int xpos=events.motion.x;
                     int ypos=events.motion.y;
 
@@ -146,6 +148,7 @@ int SDLCommon::RenderMenu(SDL_Renderer* screen, TTF_Font* font, SDL_Event events
                     {
                         if(CheckFocus(xpos, ypos, MenuItemPos[i]))
                         {
+
                             Menu[i].SetColor(Text::WHITE_TEXT);
                         }
                         else
@@ -156,7 +159,13 @@ int SDLCommon::RenderMenu(SDL_Renderer* screen, TTF_Font* font, SDL_Event events
                     break;
                 }
             case SDL_MOUSEBUTTONDOWN:
-                {
+                {/*
+                    SoundButton = Mix_LoadWAV("Button.wav");
+                    if(SoundButton==NULL)
+                    {
+                        LogError("Failed to load Lose sound", MIX_ERROR);
+                    }
+                    Mix_PlayChannel(-1, SoundButton, 0);*/
                     int xpos=events.motion.x;
                     int ypos=events.motion.y;
 
@@ -185,18 +194,15 @@ int SDLCommon::RenderMenu(SDL_Renderer* screen, TTF_Font* font, SDL_Event events
 }
 bool SDLCommon::CheckFocus(const int& x, const int& y, const SDL_Rect& rect)
 {
-    if(x>=rect.x && x<=rect.x+50 &&
-       y>=rect.y && y<=rect.y+20)
+    if(x>=rect.x && x<=rect.x+85 &&
+       y>=rect.y && y<=rect.y+30)
     {
         return true;
     }
     return false;
 
 }
-void DrawEndGameSelection(LTexture gLoseTexture,
-	SDL_Event events,
-	SDL_Renderer* screen,
-	bool &Play_Again)
+void DrawEndGameSelection(SDL_Event events, SDL_Renderer* screen, bool &Play_Again)
 {
 	if (Play_Again)
 	{
@@ -205,9 +211,10 @@ void DrawEndGameSelection(LTexture gLoseTexture,
 		{
 			while (SDL_PollEvent(&events) != 0)
 			{
-				if (e.type == SDL_QUIT)
+				if (events.type == SDL_QUIT)
 				{
 					Play_Again = false;
+					close();
 				}
 
 				if (events.type == SDL_KEYDOWN)
@@ -223,11 +230,59 @@ void DrawEndGameSelection(LTexture gLoseTexture,
 						break;
 					}
 				}
+
 			}
 
-			gLoseTexture.Render(screen, 400, 200);
+
 
 			SDL_RenderPresent(screen);
 		}
 	}
+}
+
+std::string GetHighScoreFromFile(std::string path)
+{
+	std::fstream HighScoreFile;
+	std::string highscore;
+
+	HighScoreFile.open(path, std::ios::in);
+	HighScoreFile >> highscore;
+
+	return highscore;
+}
+
+void UpdateHighScore(std::string path,
+	const int& score,
+	const std::string& old_high_score)
+{
+	int oldHighScore = 0;
+	std::fstream HighScoreFile;
+	std::string newHighScore;
+	std::stringstream ConvertToInt(old_high_score);
+
+	HighScoreFile.open(path, std::ios::out);
+
+	ConvertToInt >> oldHighScore;
+	if (score > oldHighScore)
+	{
+		oldHighScore = score;
+	}
+	newHighScore = std::to_string(oldHighScore);
+
+	HighScoreFile << newHighScore;
+}
+
+void close(){
+    SDL_DestroyRenderer(gScreen);
+	gScreen = nullptr;
+
+	SDL_DestroyWindow(gWindow);
+	gWindow = nullptr;
+
+	IMG_Quit();
+	SDL_Quit();
+}
+
+
+
 
