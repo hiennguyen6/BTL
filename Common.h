@@ -9,8 +9,11 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include "LTexture.h"
+#include <ctime>
+#include <cstdlib>
 #include "Text.h"
+#include "LTexture.h"
+
 
 #define SDL_ERROR 1
 #define IMG_ERROR 2
@@ -47,11 +50,17 @@ std::string GetHighScoreFromFile(std::string path);
 
 void UpdateHighScore(std::string path, const int& score, const std::string& old_high_score);
 
+/*void HandleContinue(SDL_Event events, SDL_Renderer* screen,LTexture gContinue, bool& is_continue);
+
+void HandlePause(SDL_Event events, SDL_Renderer* screen, LTexture gPause, LTexture gContinue, bool& is_continue);*/
+
+
 void close();
 
 
 namespace SDLCommon
 {
+
     bool CheckTouch(const SDL_Rect& object1, const SDL_Rect& object2 );
     int RenderMenu(SDL_Renderer* screen, TTF_Font* font, SDL_Event events, Mix_Chunk* SoundButton);
     bool CheckFocus(const int& x, const int& y, const SDL_Rect& rect);

@@ -38,9 +38,9 @@ void Power::Init()
     PosList.clear();
   }
 
-  SetPos(20);
-  SetPos(50);
-  SetPos(80);
+  SetPos(500);
+  SetPos(530);
+  SetPos(560);
 }
 
 void Power::Decrease()

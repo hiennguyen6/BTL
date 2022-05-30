@@ -1,12 +1,12 @@
-#include <iostream>
 #include "Common.h"
 #include "Character.h"
 #include "Threats.h"
 #include "Explosion.h"
 #include "Power.h"
 #include "Text.h"
-#include<ctime>
-#include<cstdlib>
+#include "LTexture.h"
+
+
 
 using namespace std;
 
@@ -14,6 +14,8 @@ LTexture gBackGround;
 LTexture gLoseTexture;
 LTexture gChar;
 LTexture gThreats;
+LTexture gPause;
+LTexture gContinue;
 TTF_Font* gScore=NULL;
 TTF_Font* gMenu=NULL;
 
@@ -97,6 +99,16 @@ bool LoadMedia(){
          std::cout << "Failed to load background image" << std::endl;
          success=false;
     }
+    /*if(!gPause.LoadTexture("imgs/Pause2.png", gScreen))
+    {
+         std::cout << "Failed to load Pause image" << std::endl;
+         success=false;
+    }
+    if(!gContinue.LoadTexture("imgs/Continue2.png", gScreen))
+    {
+         std::cout << "Failed to load Continue image" << std::endl;
+         success=false;
+    }*/
     gSoundBullet = Mix_LoadWAV("Sounds/CharBullet.wav");
     if(gSoundBullet==NULL)
     {
@@ -159,6 +171,50 @@ bool LoadMedia(){
     }
     return success;
 }
+void HandleContinue(LTexture gContinue,
+                    SDL_Event events,
+                    SDL_Renderer* screen,
+                    bool& is_continue)
+{
+    bool Back=false;
+
+    while(!Back)
+    {
+        do
+        {
+            if(gContinue.CheckFocus(events))
+            {
+                switch(events.type)
+                {
+                case SDL_MOUSEBUTTONDOWN:
+                    Back=true;
+                    is_continue=true;
+                    break;
+                }
+            }
+            gContinue.LoadTexture("imgs/Continue2.png", gScreen);
+            gContinue.RenderBackGround(screen, 10, 10);
+            SDL_RenderPresent(screen);
+        } while(SDL_WaitEvent(&events)!=0 && events.type==SDL_MOUSEBUTTONDOWN || events.type==SDL_MOUSEMOTION);
+    }
+}
+void HandlePause(SDL_Event events,
+                 SDL_Renderer* screen,
+                 LTexture gPause,
+                 LTexture gContinue,
+                 bool& is_continue)
+{
+    if(gPause.CheckFocus(events))
+    {
+        switch(events.type)
+        {
+        case SDL_MOUSEBUTTONUP:
+            is_continue=false;
+            HandleContinue(gContinue, events, screen, is_continue);
+
+        }
+    }
+}
 
 
 
@@ -175,6 +231,7 @@ int main(int argc, char* argv[])
     }
     Mix_PlayMusic(gMenuMusic, -1);
     bool Play_Again=true;
+
     gBackGround.Render(gScreen, NULL);
     gChar.RenderBackGround(gScreen, 50, 100);
     gThreats.RenderBackGround(gScreen, 800, 100);
@@ -186,6 +243,7 @@ int main(int argc, char* argv[])
     }
     while(Play_Again)
     {
+
         Timeval=0;
         double ThreatsSpeed=3;
         double BkgSpeed=1;
@@ -232,9 +290,12 @@ int main(int argc, char* argv[])
         int powernum=POWER_NUM;
         int scoreval=0;
         bool is_quit=false;
+        bool is_continue=true;
         while(!is_quit)
         {
-            ThreatsSpeed+=0.001;
+            if(is_continue)
+            {
+                ThreatsSpeed+=0.001;
             BkgSpeed+=0.001;
             TBulletSpeed+=0.001;
             if(ThreatsSpeed==6)
@@ -250,7 +311,9 @@ int main(int argc, char* argv[])
                     is_quit=true;
                     Play_Again=false;
                 }
+                HandlePause(gEvent, gScreen, gPause, gContinue, is_continue);
                 pPlayer.HandleGetMove(gEvent, gScreen, gSoundBullet);
+
             }
             SDL_SetRenderDrawColor(gScreen, 255, 255, 255, 255);
             SDL_RenderClear(gScreen);
@@ -263,6 +326,7 @@ int main(int argc, char* argv[])
                 bkg_x=0;
             }
 
+
             //Time
             Timeval+=1;
 
@@ -271,6 +335,8 @@ int main(int argc, char* argv[])
             pPlayer.HandleMove();
             pPlayer.Render(gScreen, NULL);
             pPlayer.HandleBullet(gScreen);
+
+
 
             for(int i=0; i<THREATS_NUM; i++)
             {
@@ -322,7 +388,7 @@ int main(int argc, char* argv[])
                      }
                 }
                 //Score
-                std::string str=std::to_string(Timeval);
+                /*std::string str=std::to_string(Timeval);
                 int tmp=stoi(str);
                 tmp+=scoreval;
                 std::string str_scoreval=std::to_string(tmp);
@@ -330,7 +396,7 @@ int main(int argc, char* argv[])
                 str_score+=str_scoreval;
                 Score.SetText(str_score);
                 Score.LoadFromRenderText(gScore, gScreen);
-                Score.RenderText(gScreen, SCREEN_WIDTH-200, 10);
+                Score.RenderText(gScreen, SCREEN_WIDTH-200, 10);*/
                 bool is_touch_2 = SDLCommon::CheckTouch(pThreat->GetRect(), pPlayer.GetRect());
                 if(is_touch_2)
                 {
@@ -389,13 +455,27 @@ int main(int argc, char* argv[])
 
 
             }
-            //Time
+
+            //Score
+                std::string str=std::to_string(Timeval);
+                int tmp=stoi(str);
+                tmp+=scoreval;
+                std::string str_scoreval=std::to_string(tmp);
+                std::string str_score("Score:");
+                str_score+=str_scoreval;
+                Score.SetText(str_score);
+                Score.LoadFromRenderText(gScore, gScreen);
+                Score.RenderText(gScreen, SCREEN_WIDTH-200, 10);
+                gPause.LoadTexture("imgs/Pause2.png", gScreen);
+                gPause.RenderBackGround(gScreen, 10, 10);
+
+            /*Time
             std::string str_time("Time:");
             std::string str_timeval=std::to_string(Timeval);
             str_time+=str_timeval;
             Time.SetText(str_time);
             Time.LoadFromRenderText(gScore, gScreen);
-            Time.RenderText(gScreen, 500, 10);
+            Time.RenderText(gScreen, 500, 10);*/
 
             //highscore
             std::string str_highscore("High score:");
@@ -406,6 +486,8 @@ int main(int argc, char* argv[])
 
 
             SDL_RenderPresent(gScreen);
+
+            }
 
         }
         gLoseTexture.RenderBackGround(gScreen, 275, 200);
@@ -420,6 +502,50 @@ int main(int argc, char* argv[])
     close();
     return 0;
 }
+
+/*void HandleContinue(LTexture gContinue,
+                    SDL_Event events,
+                    SDL_Renderer* screen,
+                    bool& is_continue)
+{
+    bool Back=false;
+    while(!Back)
+    {
+        do
+        {
+            if(gContinue.CheckFocus(events))
+            {
+                switch(events.type)
+                {
+                case SDL_MOUSEBUTTONDOWN:
+                    Back=true;
+                    is_continue=true;
+                    break;
+                }
+            }
+            gContinue.RenderBackGround(screen, 10, 50);
+            SDL_RenderPresent(screen);
+        } while(SDL_WaitEvent(&events)!=0 && events.type==SDL_MOUSEBUTTONDOWN || events.type==SDL_MOUSEMOTION);
+    }
+}
+void HandlePause(SDL_Event events,
+                 SDL_Renderer* screen,
+                 LTexture gPause,
+                 LTexture gContinue,
+                 bool& is_continue)
+{
+    if(gPause.CheckFocus(events))
+    {
+        switch(events.type)
+        {
+        case SDL_MOUSEBUTTONUP:
+            is_continue=false;
+            HandleContinue(gContinue, events, screen, is_continue);
+            break;
+        }
+    }
+}*/
+
 
 
 

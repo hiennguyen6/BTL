@@ -1,19 +1,17 @@
 # depslib dependency file v1.0
-1653373046 source:d:\ltnc\btl\main.cpp
-	<iostream>
+1653934070 source:d:\ltnc\btl\main.cpp
 	"Common.h"
 	"Character.h"
 	"Threats.h"
 	"Explosion.h"
 	"Power.h"
 	"Text.h"
-	<ctime>
-	<cstdlib>
+	"LTexture.h"
 
-1653373175 source:d:\ltnc\btl\common.cpp
+1653587662 source:d:\ltnc\btl\common.cpp
 	"Common.h"
 
-1653353897 d:\ltnc\btl\common.h
+1653587736 d:\ltnc\btl\common.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_mixer.h>
@@ -22,13 +20,15 @@
 	<fstream>
 	<sstream>
 	<string>
-	"LTexture.h"
+	<ctime>
+	<cstdlib>
 	"Text.h"
-
-1653332004 source:d:\ltnc\btl\ltexture.cpp
 	"LTexture.h"
 
-1653332795 d:\ltnc\btl\ltexture.h
+1653933453 source:d:\ltnc\btl\ltexture.cpp
+	"LTexture.h"
+
+1653933453 d:\ltnc\btl\ltexture.h
 	"Common.h"
 
 1653352600 source:d:\ltnc\btl\character.cpp
@@ -59,10 +59,10 @@
 1653159974 d:\ltnc\btl\explosion.h
 	"LTexture.h"
 
-1653289060 source:d:\ltnc\btl\power.cpp
+1653933248 source:d:\ltnc\btl\power.cpp
 	"Power.h"
 
-1653247122 d:\ltnc\btl\power.h
+1653583404 d:\ltnc\btl\power.h
 	"LTexture.h"
 	<vector>
 
@@ -71,4 +71,7 @@
 
 1653300987 source:d:\ltnc\btl\text.cpp
 	"Text.h"
+
+1653585042 d:\ltnc\btl\pauconti.h
+	"LTexture.h"
 

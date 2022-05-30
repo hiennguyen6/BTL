@@ -64,12 +64,40 @@ void LTexture::Render(SDL_Renderer* gRenderer, SDL_Rect* clip)
 
 	SDL_RenderCopy(gRenderer, MTexture, clip, &RenderSpace);
 }
-void LTexture::RenderBackGround(SDL_Renderer* screen, int xoffset, int yoffset)
+void LTexture::RenderBackGround(SDL_Renderer* screen, double xoffset, double yoffset)
 {
     rect_.x=xoffset;
     rect_.y=yoffset;
     SDL_Rect RenderSpace = {rect_.x, rect_.y, rect_.w, rect_.h };
 
 	SDL_RenderCopy(screen, MTexture, NULL, &RenderSpace);
+}
+
+bool LTexture::CheckFocus(SDL_Event events)
+{
+     if (events.type == SDL_MOUSEMOTION || events.type == SDL_MOUSEBUTTONDOWN || events.type == SDL_MOUSEBUTTONUP)
+	{
+        int x,y;
+        SDL_GetMouseState(&x, &y);
+		bool check = true;
+		if (x < rect_.x)
+		{
+			check = false;
+		}
+		else if (x > rect_.x + 40)
+		{
+			check = false;
+		}
+		else if (y < rect_.y)
+		{
+			check = false;
+		}
+		else if (y > rect_.y + 40)
+		{
+			check = false;
+		}
+		return check;
+	}
+	return false;
 }
 

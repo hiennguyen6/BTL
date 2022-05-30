@@ -268,7 +268,51 @@ void UpdateHighScore(std::string path,
 
 	HighScoreFile << newHighScore;
 }
+/*
+void HandlePause(SDL_Event events,
+                 SDL_Renderer* screen,
+                 LTexture gPause,
+                 LTexture gContinue,
+                 bool& is_continue)
+{
+    if(gPause.CheckFocus(events))
+    {
+        switch(events.type)
+        {
+        case SDL_MOUSEBUTTONUP:
+            is_continue=false;
+            SDLCommon::HandleContinue(gContinue, events, screen, is_continue);
 
+        }
+    }
+}
+
+void HandleContinue(LTexture gContinue,
+                    SDL_Event events,
+                    SDL_Renderer* screen,
+                    bool& is_continue)
+{
+    bool Back=false;
+    while(!Back)
+    {
+        do
+        {
+            if(gContinue.CheckFocus(events))
+            {
+                switch(events.type)
+                {
+                case SDL_MOUSEBUTTONDOWN:
+                    Back=true;
+                    is_continue=true;
+                    break;
+                }
+            }
+            gContinue.RenderBackGround(screen, 10, 10);
+            SDL_RenderPresent(screen);
+        } while(SDL_WaitEvent(&events)!=0 && events.type==SDL_MOUSEBUTTONDOWN || events.type==SDL_MOUSEMOTION);
+    }
+}
+*/
 void close(){
     SDL_DestroyRenderer(gScreen);
 	gScreen = nullptr;

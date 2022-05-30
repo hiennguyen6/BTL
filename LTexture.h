@@ -21,7 +21,10 @@ public:
 
 	void Render(SDL_Renderer* gRenderer, SDL_Rect* clip = nullptr);
 
-	void RenderBackGround(SDL_Renderer* screen, int xoffset, int yoffset);
+	void RenderBackGround(SDL_Renderer* screen, double xoffset, double yoffset);
+
+	bool CheckFocus(SDL_Event events);
+
 
 protected:
 	SDL_Texture* MTexture;
